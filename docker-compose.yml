@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16
+    container_name: pg
+    environment:
+      POSTGRES_DB: mabase
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: apppass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appuser -d mabase"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: .
+    container_name: api
+    # Option A : si tu as créé .env, garde cette ligne
+    env_file:
+      - .env
+    # Option B : sinon, commente env_file et décommente ce bloc :
+    # environment:
+    #   PGHOST: db
+    #   PGPORT: 5432
+    #   PGDATABASE: mabase
+    #   PGUSER: appuser
+    #   PGPASSWORD: apppass
+    #   PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
