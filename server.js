@@ -1,25 +1,13 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 
-// === Middleware personnalisé ===
-function loggerMiddleware(req, res, next) {
-    console.log('🟢 Nouvelle requête entrante');
-    next(); // Passe au middleware suivant ou à la route
-}
+// Dossier statique public
+app.use(express.static(path.join(__dirname, 'public')));
 
-// On active ce middleware pour toutes les routes
-app.use(loggerMiddleware);
+// Dossier des fichiers HTML
+app.use(express.static(path.join(__dirname, 'templates')));
 
-// === Quelques routes pour tester ===
-app.get('/', (req, res) => {
-    res.send('Bienvenue sur la page d’accueil');
-});
-
-app.get('/users', (req, res) => {
-    res.send('Liste des utilisateurs');
-});
-
-// === Lancement du serveur ===
 app.listen(3000, () => {
-    console.log('✅ Serveur démarré sur http://localhost:3000');
+    console.log('✅ Serveur lancé sur http://localhost:3000');
 });
