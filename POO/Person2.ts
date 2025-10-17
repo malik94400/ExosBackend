@@ -68,45 +68,110 @@
 
 
 // Exo 10
+// class Person {
+//     life_points: number;
+//
+//     constructor() {
+//         this.life_points = 100;
+//     }
+//
+//     hit(victim: Person): void {
+//         victim.life_points -= 10;
+//         console.log(`💥 Un coup classique (-10 PV)`);
+//     }
+//
+//     is_dead(): boolean {
+//         return this.life_points <= 0;
+//     }
+// }
+//
+// // Classe dérivée
+// class Wizard extends Person {
+//     constructor() {
+//         super();
+//         this.life_points = 80;
+//     }
+//
+//     // On surcharge la méthode hit()
+//     hit(victim: Person): void {
+//         victim.life_points -= 15;
+//         console.log(`🪄 Coup de magie (-15 PV)`);
+//     }
+// }
+//
+//
+// const p1 = new Person();
+// const w1 = new Wizard();
+//
+// console.log(`Person a ${p1.life_points} PV`);
+// console.log(`Wizard a ${w1.life_points} PV`);
+//
+// // Le mage attaque la personne
+// w1.hit(p1);
+//
+// console.log(`Après l’attaque, Person a ${p1.life_points} PV`);
+
+
+// Exo 11
+// =============================
+// Classe Person
+// =============================
 class Person {
-    life_points: number;
+    private life_points: number;
 
     constructor() {
         this.life_points = 100;
     }
 
-    hit(victim: Person): void {
-        victim.life_points -= 10;
-        console.log(`💥 Un coup classique (-10 PV)`);
+    get_life_points(): number {
+        return this.life_points;
     }
 
-    is_dead(): boolean {
-        return this.life_points <= 0;
+    add_life_points(points: number): void {
+        this.life_points += points;
     }
 }
 
-// Classe dérivée
-class Wizard extends Person {
+// =============================
+// Classe HealthPotion
+// =============================
+class HealthPotion {
+    was_used_by(person: Person): void {
+        person.add_life_points(10);
+        console.log("🧪 La potion a été utilisée : +10 PV !");
+    }
+}
+
+// =============================
+// Classe Inventory
+// =============================
+class Inventory {
+    private items: any[];
+
     constructor() {
-        super();
-        this.life_points = 80;
+        this.items = [];
     }
 
-    // On surcharge la méthode hit()
-    hit(victim: Person): void {
-        victim.life_points -= 15;
-        console.log(`🪄 Coup de magie (-15 PV)`);
+    add_object(item: any): void {
+        this.items.push(item);
+    }
+
+    get_objects(): any[] {
+        return this.items;
     }
 }
 
-
+// =============================
+// Exemple d'utilisation
+// =============================
 const p1 = new Person();
-const w1 = new Wizard();
+const potion = new HealthPotion();
+const inventory = new Inventory();
 
-console.log(`Person a ${p1.life_points} PV`);
-console.log(`Wizard a ${w1.life_points} PV`);
+// On ajoute une potion dans l’inventaire
+inventory.add_object(potion);
+console.log("🎒 Inventaire :", inventory.get_objects());
 
-// Le mage attaque la personne
-w1.hit(p1);
-
-console.log(`Après l’attaque, Person a ${p1.life_points} PV`);
+// On utilise la potion sur la personne
+potion.was_used_by(p1);
+console.log(`❤️ Points de vie actuels : ${p1.get_life_points()}`);
